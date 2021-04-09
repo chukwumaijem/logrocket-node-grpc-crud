@@ -9,3 +9,14 @@ In order to run this app, issue in separate command line windows:
 - Inside the /root folder: `npm start`
 
 Then, go to http://localhost:3000/ and test it out.
+
+# Extention
+
+## The proto package
+Copy the proto_package folder into your node_modules and rename it to `proto`. Update the config as desired.
+
+## Add user service
+To start the app, open three terminals
+- For client: `node client/index.js`
+- For Customer server: `node server/cust_service.js`
+- For User server: `node server/user_service.js`
