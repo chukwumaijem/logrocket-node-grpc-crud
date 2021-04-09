@@ -1,3 +1,4 @@
+require('dotenv').config({ silent: true });
 const custClient = require('./cust_client');
 const userClient = require('./user_client');
 

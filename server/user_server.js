@@ -1,18 +1,17 @@
-const { join } = require('path');
+require('dotenv').config({ silent: true });const { join } = require('path');
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
-const PROTOS = require('protos');
+const { PROTO_PATH, protoEnvs } = require('protos');
+const { USER_SERVICE } = protoEnvs[process.env.NODE_ENV];
 
-const PROTO_PATH = join(PROTOS, 'users.proto');
-
-var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
+const packageDefinition = protoLoader.loadSync(join(PROTO_PATH, 'users.proto'), {
   keepCase: true,
   longs: String,
   enums: String,
   arrays: true,
 });
 
-var usersProto = grpc.loadPackageDefinition(packageDefinition);
+const usersProto = grpc.loadPackageDefinition(packageDefinition);
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -89,6 +88,6 @@ server.addService(usersProto.UsersService.service, {
   },
 });
 
-server.bind('127.0.0.1:30044', grpc.ServerCredentials.createInsecure());
-console.log('Server running at http://127.0.0.1:30044');
+server.bind(USER_SERVICE, grpc.ServerCredentials.createInsecure());
+console.log(`Server running at http://${USER_SERVICE}`);
 server.start();

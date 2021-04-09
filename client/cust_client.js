@@ -1,21 +1,24 @@
 const { join } = require('path');
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
-const PROTOS = require('protos');
+const { PROTO_PATH, protoEnvs } = require('protos');
+const { CUSTOMER_SERVICE } = protoEnvs[process.env.NODE_ENV];
 
-const PROTO_PATH = join(PROTOS, 'customers.proto');
+const packageDefinition = protoLoader.loadSync(
+  join(PROTO_PATH, 'customers.proto'),
+  {
+    keepCase: true,
+    longs: String,
+    enums: String,
+    arrays: true,
+  }
+);
 
-var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
-	keepCase: true,
-	longs: String,
-	enums: String,
-	arrays: true
-});
-
-const CustomerService = grpc.loadPackageDefinition(packageDefinition).CustomerService;
+const CustomerService = grpc.loadPackageDefinition(packageDefinition)
+  .CustomerService;
 const client = new CustomerService(
-	"localhost:30043",
-	grpc.credentials.createInsecure()
+  CUSTOMER_SERVICE,
+  grpc.credentials.createInsecure()
 );
 
 module.exports = client;
