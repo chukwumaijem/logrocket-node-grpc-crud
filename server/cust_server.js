@@ -1,7 +1,9 @@
-const PROTO_PATH = "./customers.proto";
+const { join } = require('path');
+const grpc = require('grpc');
+const protoLoader = require('@grpc/proto-loader');
+const PROTOS = require('protos');
 
-var grpc = require("grpc");
-var protoLoader = require("@grpc/proto-loader");
+const PROTO_PATH = join(PROTOS, 'customers.proto');
 
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 	keepCase: true,
